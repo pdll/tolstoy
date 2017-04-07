@@ -35,9 +35,6 @@ class App extends React.Component {
 
         let thisUser = this.props.current_user ? this.props.current_user.toArray()[0] : ''
 
-        
-
-
     	if (process.env.BROWSER) {
             !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
             analytics.load(SEGMENT_ANALYTICS_KEY);
@@ -85,34 +82,23 @@ class App extends React.Component {
                fjs.parentNode.insertBefore(js, fjs);
              }(document, 'script', 'facebook-jssdk'));
 
-
-
             if (thisUser) {
-
-           
-
               window.dataLayer = window.dataLayer || [];
               window.dataLayer.push({
                   'logged': 'yes',
-                  'userid': {thisUser}
+                  'userid': thisUser
               })
-             
-             
 
             } else {
-
-                 
               window.dataLayer = window.dataLayer || [];
               window.dataLayer.push({
-                  'logged': 'no',
-                  
+                  'logged': 'no'
               })
-
             }
 
 
 
-           
+
 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -188,7 +174,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         let bitva = '';
          if (location.pathname === '/bitva') bitva = 'Bitva__overall';
 
-        
+
 
 
 
@@ -366,7 +352,7 @@ App.propTypes = {
 export default connect(
     state => {
 
-     
+
 
         return {
             error: state.app.get('error'),

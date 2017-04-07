@@ -117,7 +117,7 @@ class FeedbackResults extends Component {
              <LinkContainer to={`/feedback/results/ceh/2017-04-15/all`}>
                <MenuItem>15 апреля</MenuItem>
              </LinkContainer>
-      
+
     </DropdownButton>
           <li className={this.getEvent() === '2' ? 'active' : ''}>
             <Link to={`/feedback/results/mzs/all/all`}>МЗС</Link>
@@ -156,8 +156,7 @@ class FeedbackResults extends Component {
                 <MenuItem>Все города</MenuItem>
               </LinkContainer>
 
-
-          {this.state.cities.map(city => (
+          {this.state.cities.filter(x => x.name !== null).map(city => (
               <LinkContainer to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/${city.name}`}>
                 <MenuItem>{city.name} ({city.count})</MenuItem>
               </LinkContainer>
@@ -165,7 +164,7 @@ class FeedbackResults extends Component {
               ))}
 
            <LinkContainer to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/other`}>
-                <MenuItem>Другие города</MenuItem>
+                <MenuItem>Другие города ({this.state.cities.filter(x => x.name === null)[0].count})</MenuItem>
               </LinkContainer>
 
           </DropdownButton>
@@ -264,13 +263,13 @@ class FeedbackResults extends Component {
               <li className={this.getCity() === 'all' ? "active": ""} >
                 <Link to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/all`}>Все города</Link>
               </li>
-              {this.state.cities.map(city => (
+              {this.state.cities.filter(x => x.name !== null).map(city => (
                 <li className={this.getCity() === city.name ? "active": ""} key={city.name}>
                   <Link to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/${city.name}`}>{ city.name } ({ city.count })</Link>
                 </li>
               ))}
               <li  className={this.getCity() === 'other' ? "active": ""} >
-                <Link to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/other`}>Другие города</Link>
+                <Link to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/other`}>Другие города ({this.state.cities.filter(x => x.name === null)[0].count})</Link>
             </li>
             </ul>
           </div>

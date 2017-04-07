@@ -112,15 +112,16 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 
                 <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <div className="TopRightMenu__search-icon"></div>}</a></li>
                 {allPrograms && (
-                  <div style={{ width: '50px' }}>
+                  <li>
                     <select
                       defaultValue={currentProgram}
-                      style={{ padding: '0 1px 0 3px' }}
+                      className="TopRightMenu__switchBtn"
+                      
                       onChange={updateProgram}>
                       <option value='1'>ЦЕХ</option>
                       <option value='2'>МЗС</option>
                     </select>
-                  </div>
+                  </li>
                 )}
                 <LinkWithDropdown
                     closeOnClickOutside

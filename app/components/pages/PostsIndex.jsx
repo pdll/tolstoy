@@ -242,7 +242,7 @@ class PostsIndex extends React.Component {
 
         //Кнопка входа в игру
         let thegame
-        if (this.props.current_program == 1) {
+        if (this.props.current_program == 2) {
            thegame = <div className="PostsIndex__thegame-href">
                         <Link to="/gamevote"><div className="PostsIndex__thegame-button">Перейти в игру</div>
                         </Link>

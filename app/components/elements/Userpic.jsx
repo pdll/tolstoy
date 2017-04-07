@@ -4,8 +4,23 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import _urls from 'shared/clash/images/urls'
 import Apis from 'shared/api_client/ApiInstances'
+import { endsWith } from 'lodash'
 
 const {oneOfType, string, object} = PropTypes
+
+const getPhotoUrl = path => {
+  if (endsWith(path, '/null')) {
+    return '/images/user.png'
+  }
+  if (path === '/images/user.png') {
+    return '/images/user.png'
+  }
+  const proxy = $STM_Config.img_proxy_prefix
+  if (proxy) {
+    return `${proxy}50x50/${path}`
+  }
+  return path
+}
 
 class Userpic extends Component {
 	// you can pass either user object, or username string
@@ -26,7 +41,7 @@ class Userpic extends Component {
         const {account} = this.props
         if (typeof account != 'object') {
             Apis.db_api('get_accounts', [account]).then(res => {
-              
+
                 this.setState({account: res[0]})
             });
         }
@@ -35,7 +50,7 @@ class Userpic extends Component {
     onError = () => this.setState({image: '/images/user.png'})
 
 	render() {
-      
+
 
 		const {props, state} = this
 		let {dispatch, ...rest} = props
@@ -57,14 +72,9 @@ class Userpic extends Component {
             // console.warn(e)
             url = '/images/user.png'
         }
-		const proxy = $STM_Config.img_proxy_prefix
-		if (proxy && url) {
-			const size = props.width + 'x' + props.height
-			url = proxy + size + '/' + url;
-		}
 		return 	<div className="Userpic">
                     {process.env.BROWSER ?
-                        url ? <img src={_urls.proxyImage(url || '')}  onError={this.onError} /> : <div className="Userpic__defaultAva"></div> :
+                        url ? <img src={getPhotoUrl(url)}  onError={this.onError} /> : <div className="Userpic__defaultAva"></div> :
                         <LoadingIndicator type="circle" inline />}
 				</div>;
 	}

@@ -10,8 +10,17 @@ class Content extends Component {
   constructor (props) {
     super(props)
 
+    this.state = {
+      tags: [],
+      content: []
+    }
+
     this.getTag = this.getTag.bind(this)
     this.getEvent = this.getEvent.bind(this)
+  }
+
+  componentDidMount () {
+    this.getContent()
   }
 
   getEvent (props = this.props, type = 'numeric') {
@@ -48,14 +57,34 @@ class Content extends Component {
     { name: 'МЗС', code: 'mzs', num: 2 }
   ]
 
-  posts = [
-    { id: 123, title: 'Пост 1', description: 'Краткое описание краткое описание краткое описание' },
-    { id: 222, title: 'Пост 2', description: 'Краткое описание краткое описание краткое описание' },
-    { id: 333, title: 'Пост 3', description: 'Краткое описание краткое описание краткое описание' },
-    { id: 444, title: 'Пост 4', description: 'Краткое описание краткое описание краткое описание' }
-  ]
+  getContent () {
+    fetch(`/api/v1/content_list?program=1`)
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          content: res.result
+        })        
+        let ids = []
+        res.result.map(el => ids.push(el.Post.id))
+        this.getTags(ids)
+      })
+      .catch(err => console.warn(err))
+  }
+  
+  getTags (ids) {
+    fetch('/api/v1/content_list_tags?ids=' + ids.join(','))
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          tags: res.result
+        })
+      })
+      .catch(err => console.warn(err))
+  }
 
   render () {
+    let { content, tags } = this.state
+
     return (<div>
       <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
 
@@ -79,16 +108,17 @@ class Content extends Component {
 
         <br />
 
-        { this.posts.map(el => (
-          <div className="PostSummary content-post" key={ 'content-post-' + el.id }>
-            <img className="content-post__image" src="" alt={ el.title } />
-            <h3>{ el.title }</h3>
-            <p>{ el.description }</p>
+        { (content && content.length) && content.map(el => (
+          <div className="PostSummary content-post" key={ 'content-post-' + el.Post.id }>
+            <img className="content-post__image" src="" alt={ el.Post.title } />
+            <h3>{ el.Post.title }</h3>
+            <p>{ el.Post.content }</p>
 
-            <div className="content-post__row content-post__row_tags">
-              <Link className="content-post__tag" to={'/'}>Видео</Link>,
-              <Link className="content-post__tag" to={'/'}>Трафик</Link>
-            </div>
+            { el.Post.Tags.length && <div className="content-post__row content-post__row_tags">
+              { el.Post.Tags.map(tag => (
+                <Link key={el.Post.id + '-tag-' + tag.name } className="content-post__tag" to={ `/content/${this.getEvent(this.props, 'string')}?tag=` + tag.name }>{ tag.name }</Link>
+              ))}
+            </div>}
 
             <div className="content-post__row content-post__row_nfs">
               <StarRatingComponent name='post-nfs' starCount={10} editing={true} emptyStarColor='#e3e1d6' />
@@ -101,7 +131,7 @@ class Content extends Component {
       <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
         <div className="Card Card__minus-margin">
           <ul className="Card__ul-citys">
-            { this.tags.map(el => (
+            { tags.length && tags.map(el => (
               <li className={ this.getTag() === el.name ? "active" : "" } key={ 'content-tags-' + el.name }>
                 <Link to={ `/content/${this.getEvent(this.props, 'string')}?tag=` + el.name }>{ el.name } ({ el.count })</Link>
               </li>

@@ -70,7 +70,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" />
 
             { assets.style.map((href, idx) =>
-                <link href={href + '?v=3'} key={idx} rel="stylesheet" type="text/css" />) }
+                <link href={href + '?v=3.38'} key={idx} rel="stylesheet" type="text/css" />) }
             <title>{page_title}</title>
         </head>
         <body>
@@ -82,7 +82,7 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
 
 
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
-        {assets.script.map((href, idx) => <script key={ idx } src={ href + '?v=3'}></script>) }
+        {assets.script.map((href, idx) => <script key={ idx } src={ href + '?v=3.38'}></script>) }
         {config.js_plugins_path && <script src={config.js_plugins_path}></script>}
         </body>
         </html>

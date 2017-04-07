@@ -1133,6 +1133,8 @@ export default function useGeneralApi(app) {
 						model: models.User,
 						attributes: ['id', 'first_name', 'last_name', 'name'],
 						where: {
+  						couch: true,
+  						couch_group: null,
 							$or: [{
 								current_program: program
 							}, {
@@ -3045,14 +3047,76 @@ export default function useGeneralApi(app) {
 		})
 	})
 
+
 	router.get('/content_list', koaBody, function* () {
-		let result = yield sequelize.query(`
-			SELECT * FROM posts_content LEFT JOIN posts ON (posts_content.post_id = posts.id)
-		`)
+		let result = yield models.ContentPost.findAll({
+			attributes: [  'rating', 'price', 'Post.title' ],
+			include: [
+				{
+					model: models.Post,
+					where: {
+						id: sequelize.col('post_id')
+					},
+					include: [
+						{
+							attributes: [ 'name' ],
+							model: models.Tag,
+							where: {
+								post_id: sequelize.col('Post.id')
+							},
+							required: false,
+							group: [ sequelize.col('Post.Tags.id') ]
+						},
+						{
+							attributes: [ 'name', 'id' ],
+							model: models.Program,
+							where: { id: this.query.program || 0 }
+						}
+					]
+				}
+			]
+		})
 
 		this.body = JSON.stringify({
-			data: result
+			result
 		})
+	})
+
+	router.get('/content_list_tags', koaBody, function* () {
+		let post_id_array = this.query.ids.split(',')
+		let result = yield models.Tag.findAll({
+			raw: true,
+			attributes: [
+				'name',
+				[ sequelize.fn('count', 'Tag.id'), 'count' ]
+			],
+			where: {
+				post_id: { $in: post_id_array }
+			},
+			group: [ 'name' ]
+		})
+
+		this.body = JSON.stringify({
+			result
+		})
+
+	router.get('/get_co_couch', koaBody, function* () {
+		if (rateLimitReq(this, this.req)) return
+
+		const id = this.query.id === 'undefined' ? null : this.query.id
+
+		const couch = yield models.User.findOne({
+			attributes: ['id', 'name', 'first_name', 'last_name'],
+			where: {
+				couch: true,
+				couch_group: id
+			}
+		})
+
+    this.body = JSON.stringify({
+      couch
+    })
+
 	})
 
 }

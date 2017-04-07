@@ -5,6 +5,7 @@ import Beta from 'app/components/elements/Beta'
 import Userpic from 'app/components/elements/Userpic'
 import HorizontalMenu from 'app/components/elements/HorizontalMenu'
 import HorizontalSubmenu from 'app/components/elements/HorizontalSubmenu'
+import CouchGroup from 'app/components/cards/CouchGroup'
 
 import {
 	getUsersByCategory,
@@ -245,10 +246,10 @@ class Rating extends Component {
 				<div className="Rating_wrapper">
 						{users.map(user => user.User && (
 							<div className="Rating__row" key={user.id}>
-								<User account={user.User.name}
-								      link={`/rating/couch-group/${user.User.id}`}
-								      name={`Тренерская группа ${user.User.first_name} ${user.User.last_name}`}/>
-								<div className="Rating__money">{moneyPrettify(user.money)} ₽</div>
+								<CouchGroup
+									money={`${moneyPrettify(user.money)} ₽`}
+									couch={user.User}
+									link={`/rating/couch-group/${user.User.id}`} />
 							</div>
 						))}
 				</div>
