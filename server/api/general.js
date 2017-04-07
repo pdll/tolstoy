@@ -3095,6 +3095,55 @@ export default function useGeneralApi(app) {
 			},
 			group: [ 'name' ]
 		})
+=======
+>>>>>>> 722fb4f58df2d8438e23a4063435c6a581f969b5
+
+		this.body = JSON.stringify({
+			result
+		})
+
+	router.get('/get_co_couch', koaBody, function* () {
+		if (rateLimitReq(this, this.req)) return
+
+		const id = this.query.id === 'undefined' ? null : this.query.id
+
+		const couch = yield models.User.findOne({
+			attributes: ['id', 'name', 'first_name', 'last_name'],
+			where: {
+				couch: true,
+				couch_group: id
+			}
+		})
+
+    this.body = JSON.stringify({
+      couch
+    })
+
+	})
+
+	router.get('/content_list_tags', koaBody, function* () {
+		let result = yield models.Tag.findAll({
+			attributes: [
+				'name',
+				[ sequelize.fn('COUNT', 'id'), 'count' ]
+			],
+			include: [
+				{
+					model: models.Post,
+					where: {
+						id: sequelize.col('post_id')
+					},
+					include: [
+						{
+							attributes: [ 'id' ],
+							model: models.Program,
+							where: { id: this.query.program || 0 }
+						}
+					]
+				}
+			],
+			group: [ 'name' ]
+		})
 
 		this.body = JSON.stringify({
 			result

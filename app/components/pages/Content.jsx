@@ -21,6 +21,10 @@ class Content extends Component {
 
   componentDidMount () {
     this.getContent()
+<<<<<<< HEAD
+=======
+    this.getTags()
+>>>>>>> 722fb4f58df2d8438e23a4063435c6a581f969b5
   }
 
   getEvent (props = this.props, type = 'numeric') {
@@ -63,16 +67,25 @@ class Content extends Component {
       .then(res => {
         this.setState({
           content: res.result
+<<<<<<< HEAD
         })        
         let ids = []
         res.result.map(el => ids.push(el.Post.id))
         this.getTags(ids)
+=======
+        })
+>>>>>>> 722fb4f58df2d8438e23a4063435c6a581f969b5
       })
       .catch(err => console.warn(err))
   }
   
+<<<<<<< HEAD
   getTags (ids) {
     fetch('/api/v1/content_list_tags?ids=' + ids.join(','))
+=======
+  getTags () {
+    fetch('/api/v1/content_list_tags?program=1')
+>>>>>>> 722fb4f58df2d8438e23a4063435c6a581f969b5
       .then(res => res.json())
       .then(res => {
         this.setState({
@@ -84,6 +97,10 @@ class Content extends Component {
 
   render () {
     let { content, tags } = this.state
+<<<<<<< HEAD
+=======
+    console.log(this.state)
+>>>>>>> 722fb4f58df2d8438e23a4063435c6a581f969b5
 
     return (<div>
       <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
@@ -116,7 +133,11 @@ class Content extends Component {
 
             { el.Post.Tags.length && <div className="content-post__row content-post__row_tags">
               { el.Post.Tags.map(tag => (
+<<<<<<< HEAD
                 <Link key={el.Post.id + '-tag-' + tag.name } className="content-post__tag" to={ `/content/${this.getEvent(this.props, 'string')}?tag=` + tag.name }>{ tag.name }</Link>
+=======
+                <Link key={el.Post.id + '-tag-' + tag.name } className="content-post__tag" to={'/'}>{ tag.name }</Link>
+>>>>>>> 722fb4f58df2d8438e23a4063435c6a581f969b5
               ))}
             </div>}
 
@@ -131,7 +152,11 @@ class Content extends Component {
       <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
         <div className="Card Card__minus-margin">
           <ul className="Card__ul-citys">
+<<<<<<< HEAD
             { tags.length && tags.map(el => (
+=======
+            { tags.map(el => (
+>>>>>>> 722fb4f58df2d8438e23a4063435c6a581f969b5
               <li className={ this.getTag() === el.name ? "active" : "" } key={ 'content-tags-' + el.name }>
                 <Link to={ `/content/${this.getEvent(this.props, 'string')}?tag=` + el.name }>{ el.name } ({ el.count })</Link>
               </li>
